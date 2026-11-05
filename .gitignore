@@ -1,0 +1,72 @@
+
+# ==============================
+# Visual Studio
+# ==============================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==============================
+# .NET / C#
+# ==============================
+**/bin/
+**/obj/
+**/out/
+*.dll
+*.exe
+*.pdb
+
+# ==============================
+# Node.js / React / Electron
+# ==============================
+**/node_modules/
+**/dist/
+**/build/
+**/.vite/
+**/coverage/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ==============================
+# Environment variables / Secrets
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# IDEs
+# ==============================
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ==============================
+# Operating system
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Logs
+# ==============================
+*.log
+
+# ==============================
+# Temporary files
+# ==============================
+*.tmp
+*.bak
+*.swp
+
+# ==============================
+# Database
+# ==============================
+*.db
+*.db-shm
+*.db-wal
