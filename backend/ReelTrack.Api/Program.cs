@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ReelTrack.Api.Data;
+using ReelTrack.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+builder.Services.AddHttpClient<TmdbService>(client => {
+    client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+});
 
 // Register the database context
 builder.Services.AddDbContext<ReelTrackContext>(options =>
