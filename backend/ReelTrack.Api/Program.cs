@@ -9,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("Frontend", policy => {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddHttpClient<TmdbService>(client => {
     client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
 });
@@ -21,6 +30,7 @@ builder.Services.AddDbContext<ReelTrackContext>(options =>
 );
 
 var app = builder.Build();
+app.UseCors("Frontend");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

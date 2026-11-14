@@ -1,0 +1,63 @@
+.continue-watching {
+    margin-top: 40px;
+}
+
+.continue-watching h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.continue-watching-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.series-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background-color: #1b1b1b;
+    border: 1px solid #303030;
+    border-radius: 12px;
+}
+
+.series-card img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.series-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.series-card-info h3 {
+    margin: 0 0 12px;
+}
+
+.series-card-info p {
+    color: #a0a0a0;
+    font-size: 14px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #383838;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0 6px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #8b5cf6;
+    border-radius: 4px;
+}
+
+.series-card-info span {
+    color: #a0a0a0;
+    font-size: 12px;
+}

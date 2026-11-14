@@ -78,7 +78,8 @@ namespace ReelTrack.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpisodeId");
+                    b.HasIndex("EpisodeId")
+                        .IsUnique();
 
                     b.ToTable("EpisodeWatches");
                 });

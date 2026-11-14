@@ -70,3 +70,19 @@ desktop.ini
 *.db
 *.db-shm
 *.db-wal
+
+# .NET
+**/TestResults/
+**/publish/
+**/artifacts/
+*.coverage
+*.coveragexml
+
+# Frontend test and tooling
+**/.eslintcache
+**/playwright-report/
+**/test-results/
+
+# Database backups
+*.bak
+*.dump

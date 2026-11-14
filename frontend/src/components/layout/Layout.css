@@ -1,0 +1,13 @@
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #101010;
+    color: #ffffff;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+    overflow-y: auto;
+}

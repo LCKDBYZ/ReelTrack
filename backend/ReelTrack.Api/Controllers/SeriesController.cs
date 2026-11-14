@@ -17,11 +17,44 @@ namespace ReelTrack.Api.Controllers {
             this.tmdbService = tmdbService;
         }
 
-        // Get all series
+        // Get all series with viewing progress
         [HttpGet]
         public async Task<IActionResult> GetAll() {
             var series = await context.Series
                 .AsNoTracking()
+                .Select(s => new {
+                    s.Id,
+                    s.TmdbId,
+                    s.Title,
+                    s.Overview,
+                    s.FirstAirDate,
+                    s.LastAirDate,
+                    s.PosterPath,
+                    s.Rating,
+                    s.Status,
+                    s.IsFavorite,
+
+                    TotalEpisodes = s.Seasons
+                        .SelectMany(season => season.Episodes)
+                        .Count(),
+
+                    WatchedEpisodes = s.Seasons
+                        .SelectMany(season => season.Episodes)
+                        .Count(episode => episode.Watches.Any()),
+
+                    NextEpisode = s.Seasons
+                        .SelectMany(season => season.Episodes)
+                        .Where(episode => !episode.Watches.Any())
+                        .OrderBy(episode => episode.Season.SeasonNumber)
+                        .ThenBy(episode => episode.EpisodeNumber)
+                        .Select(episode => new {
+                            Id = episode.Id,
+                            SeasonNumber = episode.Season.SeasonNumber,
+                            EpisodeNumber = episode.EpisodeNumber,
+                            Title = episode.Title
+                        })
+                        .FirstOrDefault()
+                })
                 .ToListAsync();
 
             return Ok(series);
@@ -53,6 +86,10 @@ namespace ReelTrack.Api.Controllers {
                     s.Overview,
                     s.FirstAirDate,
                     s.LastAirDate,
+                    s.PosterPath,
+                    s.BackdropPath,
+                    s.Status,
+                    s.Rating,
                     Seasons = s.Seasons.Select(season => new {
                         season.Id,
                         season.TmdbId,
@@ -64,7 +101,13 @@ namespace ReelTrack.Api.Controllers {
                             tmdbId = episode.TmdbId,
                             episodeNumber = episode.EpisodeNumber,
                             title = episode.Title,
-                            isWatched = episode.Watches.Any()
+                            isWatched = episode.Watches.Any(),
+                            overview = episode.Overview,
+                            airDate = episode.AirDate,
+                            runtime = episode.Runtime,
+                            watchId = episode.Watches
+                                .Select(watch => watch.Id)
+                                .FirstOrDefault()
                         })
                     })
                 })
@@ -85,13 +128,46 @@ namespace ReelTrack.Api.Controllers {
                     id = e.Id,
                     seasonNumber = e.Season.SeasonNumber,
                     episodeNumber = e.EpisodeNumber,
-                    title = e.Title
+                    title = e.Title,
+                    overview = e.Overview
                 })
                 .FirstOrDefaultAsync();
 
             return Ok(new {
                 series,
                 nextEpisode
+            });
+        }
+
+        public class UpdateSeriesRequest {
+            public WatchStatus Status { get; set; }
+            public decimal? Rating { get; set; }
+        }
+
+        // Update a series status and rating
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateSeriesRequest request) {
+            var series = await context.Series.FindAsync(id);
+
+            if (series == null) {
+                return NotFound("Series not found.");
+            }
+
+            if (request.Rating < 1 || request.Rating > 10) {
+                if (request.Rating != null) {
+                    return BadRequest("Rating must be between 1 and 10.");
+                }
+            }
+
+            series.Status = request.Status;
+            series.Rating = request.Rating;
+
+            await context.SaveChangesAsync();
+
+            return Ok(new {
+                series.Id,
+                series.Status,
+                series.Rating
             });
         }
 

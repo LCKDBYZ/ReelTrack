@@ -1,0 +1,129 @@
+.series-page h1 {
+    font-size: 28px;
+    margin-top: 0;
+}
+
+.series-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.series-header p {
+    color: #c4c4c4;
+    font-size: 14px;
+}
+
+.series-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.series-list-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px;
+    background-color: #1b1b1b;
+    border: 1px solid #303030;
+    border-radius: 12px;
+}
+
+.series-list-item img,
+.series-no-poster {
+    width: 100px;
+    height: 150px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.series-no-poster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #252525;
+    color: #a0a0a0;
+}
+
+.series-list-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.series-list-info h3 {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.4;
+}
+
+.series-list-info p {
+    color: #c4c4c4;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.series-list-info span {
+    color: #a0a0a0;
+    font-size: 13px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #383838;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0 6px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #8b5cf6;
+    border-radius: 4px;
+}
+
+.series-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+}
+
+.series-status {
+    padding: 4px 9px;
+    border-radius: 5px;
+    background-color: #303030;
+    color: #d0d0d0;
+    font-size: 12px;
+}
+
+.status-0 {
+    color: #c4b5fd;
+}
+
+.status-1 {
+    color: #93c5fd;
+}
+
+.status-2,
+.status-5 {
+    color: #86efac;
+}
+
+.status-3 {
+    color: #fcd34d;
+}
+
+.status-4 {
+    color: #fca5a5;
+}
+
+.series-rating {
+    color: #fbbf24;
+    font-size: 13px;
+    font-weight: 600;
+}

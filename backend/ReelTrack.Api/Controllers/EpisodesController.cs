@@ -32,6 +32,20 @@ namespace ReelTrack.Api.Controllers {
             return Ok(watches);
         }
 
+        // Get episode statistics
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats() {
+            int totalEpisodes = await context.Episodes.CountAsync();
+
+            int watchedEpisodes = await context.Episodes
+                .CountAsync(e => e.Watches.Any());
+
+            return Ok(new {
+                totalEpisodes,
+                watchedEpisodes
+            });
+        }
+
         // Mark an episode as watched
         [HttpPost("{id}/watches")]
         public async Task<IActionResult> MarkAsWatched(int id) {
