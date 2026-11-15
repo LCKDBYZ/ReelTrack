@@ -171,6 +171,26 @@ namespace ReelTrack.Api.Controllers {
             });
         }
 
+        // Delete a series and its related data
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) {
+            var series = await context.Series
+                .Include(s => s.Seasons)
+                    .ThenInclude(s => s.Episodes)
+                        .ThenInclude(e => e.Watches)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (series == null) {
+                return NotFound("Series not found.");
+            }
+
+            context.Series.Remove(series);
+
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         // Import a series and all its seasons and episodes from TMDB
         [HttpPost("import/{tmdbId}")]
         public async Task<IActionResult> ImportFromTmdb(int tmdbId) {

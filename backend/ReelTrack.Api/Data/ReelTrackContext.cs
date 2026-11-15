@@ -13,6 +13,24 @@ namespace ReelTrack.Api.Data {
             modelBuilder.Entity<EpisodeWatch>()
                 .HasIndex(watch => watch.EpisodeId)
                 .IsUnique();
+
+            modelBuilder.Entity<Series>()
+                .HasMany(series => series.Seasons)
+                .WithOne(season => season.Series)
+                .HasForeignKey(season => season.SeriesId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Season>()
+                .HasMany(season => season.Episodes)
+                .WithOne(episode => episode.Season)
+                .HasForeignKey(episode => episode.SeasonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Episode>()
+                .HasMany(episode => episode.Watches)
+                .WithOne(watch => watch.Episode)
+                .HasForeignKey(watch => watch.EpisodeId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         // Database tables

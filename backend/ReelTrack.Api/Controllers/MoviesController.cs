@@ -99,6 +99,34 @@ namespace ReelTrack.Api.Controllers {
             return NoContent();
         }
 
+        // Update movie tracking information
+        [HttpPut("{id}/tracking")]
+        public async Task<IActionResult> UpdateTracking(
+            int id,
+            UpdateMovieTrackingRequest request) {
+            var movie = await context.Movies.FindAsync(id);
+
+            if (movie == null) {
+                return NotFound("Movie not found.");
+            }
+
+            if (request.Rating.HasValue &&
+                (request.Rating < 1 || request.Rating > 10)) {
+                return BadRequest("Rating must be between 1 and 10.");
+            }
+
+            movie.Status = request.Status;
+            movie.Rating = request.Rating;
+
+            await context.SaveChangesAsync();
+
+            return Ok(new {
+                movie.Id,
+                movie.Status,
+                movie.Rating
+            });
+        }
+
         // Delete a movie
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSeries } from "../services/api";
+import { getSeries, deleteSeries } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import "./Series.css";
 
@@ -23,6 +23,26 @@ function Series() {
 
         loadSeries();
     }, []);
+
+    async function handleDelete(seriesId, seriesTitle) {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete "${seriesTitle}"?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await deleteSeries(seriesId);
+
+            setSeries(currentSeries =>
+                currentSeries.filter(item => item.id !== seriesId)
+            );
+        } catch (error) {
+            setError(error.message);
+        }
+    }
 
     if (loading) {
         return <p>Loading series...</p>;
@@ -99,6 +119,16 @@ function Series() {
 
                                     <span>{progress}% completed</span>
                                 </div>
+
+                                <button
+                                    className="delete-series-button"
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        handleDelete(item.id, item.title);
+                                    }}
+                                >
+                                    Delete
+                                </button>
                             </div>
                         );
                     })}

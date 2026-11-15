@@ -61,3 +61,47 @@
     color: #a0a0a0;
     font-size: 12px;
 }
+
+.recent-watches {
+    margin-top: 32px;
+}
+
+.recent-watches h2 {
+    margin-bottom: 20px;
+}
+
+.recent-watches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recent-watch-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background-color: #252525;
+    border-radius: 10px;
+}
+
+.recent-watch-item img {
+    width: 60px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.recent-watch-item h3 {
+    margin: 0 0 6px;
+}
+
+.recent-watch-item p {
+    margin: 0 0 6px;
+    color: #b0b0b0;
+}
+
+.recent-watch-item span {
+    color: #888;
+    font-size: 13px;
+}

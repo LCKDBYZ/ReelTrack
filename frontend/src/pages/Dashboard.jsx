@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import {
     getMovies,
     getSeries,
-    getEpisodeStats
+    getEpisodeStats,
+    getRecentWatches
 } from "../services/api";
 import "./Dashboard.css";
 
@@ -12,20 +13,23 @@ function Dashboard() {
     const [episodeStats, setEpisodeStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [recentWatches, setRecentWatches] = useState([]);
 
     useEffect(() => {
         async function loadDashboard() {
             try {
-                const [movieData, seriesData, episodeData] =
+                const [movieData, seriesData, episodeData, recentWatchData] =
                     await Promise.all([
                         getMovies(),
                         getSeries(),
-                        getEpisodeStats()
+                        getEpisodeStats(),
+                        getRecentWatches()
                     ]);
 
                 setMovies(movieData);
                 setSeries(seriesData);
                 setEpisodeStats(episodeData);
+                setRecentWatches(recentWatchData);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -117,6 +121,44 @@ function Dashboard() {
                                 </div>
                             );
                         })}
+                    </div>
+                )}
+            </section>
+
+            <section className="recent-watches">
+                <h2>Recently Watched</h2>
+
+                {recentWatches.length === 0 ? (
+                    <p>No viewing history yet.</p>
+                ) : (
+                    <div className="recent-watches-list">
+                        {recentWatches.map((item, index) => (
+                            <div className="recent-watch-item" key={`${item.type}-${index}`}>
+                                {item.posterPath && (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w200${item.posterPath}`}
+                                        alt={item.title}
+                                    />
+                                )}
+
+                                <div>
+                                    {item.type === "Movie" ? (
+                                        <h3>{item.title}</h3>
+                                    ) : (
+                                        <>
+                                            <h3>{item.seriesTitle}</h3>
+                                            <p>
+                                                S{item.seasonNumber}E{item.episodeNumber} – {item.title}
+                                            </p>
+                                        </>
+                                    )}
+
+                                    <span>
+                                        {new Date(item.watchedAt).toLocaleDateString()}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
             </section>

@@ -1,0 +1,127 @@
+.movies-page {
+    color: white;
+}
+
+.movies-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.movies-header h1 {
+    margin: 0;
+}
+
+.movies-header p {
+    color: #a0a0a0;
+}
+
+.movies-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+}
+
+.movie-list-item {
+    overflow: hidden;
+    background-color: #1b1b1b;
+    border: 1px solid #303030;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.movie-list-item img,
+.movie-no-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+.movie-no-poster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #303030;
+    color: #a0a0a0;
+}
+
+.movie-list-info {
+    padding: 12px;
+}
+
+.movie-list-info h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.movie-list-info p {
+    margin: 0;
+    color: #a0a0a0;
+    font-size: 13px;
+}
+
+.movie-list-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.movie-status {
+    padding: 4px 9px;
+    border-radius: 5px;
+    background-color: #303030;
+    color: #d0d0d0;
+    font-size: 12px;
+}
+
+.status-0 {
+    color: #c4b5fd;
+}
+
+.status-1 {
+    color: #93c5fd;
+}
+
+.status-2,
+.status-5 {
+    color: #86efac;
+}
+
+.status-3 {
+    color: #fcd34d;
+}
+
+.status-4 {
+    color: #fca5a5;
+}
+
+.movie-rating {
+    color: #fbbf24;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.movie-list-item:hover {
+    transform: translateY(-4px);
+    border-color: #8b5cf6;
+}
+
+.delete-movie-button {
+    margin-top: 10px;
+    padding: 7px 14px;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #f87171;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.delete-movie-button:hover {
+    background-color: #dc2626;
+    color: white;
+}
