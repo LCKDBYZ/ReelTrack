@@ -1,0 +1,216 @@
+.tmdb-details {
+    position: relative;
+    min-height: 100%;
+    color: white;
+    overflow: hidden;
+    background-color: #111;
+    border-radius: 12px;
+}
+
+.tmdb-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 600px;
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.3;
+}
+
+.tmdb-details-content {
+    position: relative;
+    z-index: 1;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tmdb-details-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+    order: -1;
+}
+
+.tmdb-details-actions button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #292929;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tmdb-details-actions button:last-child {
+    background-color: #8b5cf6;
+}
+
+.tmdb-details-actions button:hover {
+    opacity: 0.85;
+}
+
+.tmdb-details-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.tmdb-import-message {
+    margin-bottom: 20px;
+    color: #a78bfa;
+}
+
+.tmdb-main-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.tmdb-poster {
+    width: 280px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.tmdb-text-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.tmdb-poster {
+    width: 280px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.tmdb-text-info {
+    max-width: 750px;
+    padding-top: 10px;
+}
+
+.tmdb-text-info h1 {
+    margin: 0 0 16px;
+    font-size: 36px;
+}
+
+.tmdb-release-date {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.tmdb-rating {
+    color: #fbbf24;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 24px 0;
+}
+
+.tmdb-text-info h2 {
+    margin-top: 32px;
+    font-size: 22px;
+}
+
+.tmdb-overview {
+    color: #d1d1d1;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+    .tmdb-main-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tmdb-poster {
+        width: 220px;
+    }
+
+    .tmdb-text-info h1 {
+        font-size: 28px;
+    }
+
+    .tmdb-details-content {
+        padding: 18px;
+    }
+}
+
+.tmdb-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.tmdb-genres span {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: #292929;
+    color: #c4b5fd;
+    font-size: 13px;
+}
+
+.tmdb-extra-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 20px 0;
+    color: #d1d1d1;
+    font-size: 14px;
+}
+
+.tmdb-extra-info span {
+    padding: 8px 12px;
+    background-color: rgba(41, 41, 41, 0.8);
+    border-radius: 6px;
+}
+
+.tmdb-seasons {
+    margin-top: 48px;
+}
+
+.tmdb-seasons h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.tmdb-seasons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tmdb-season {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+}
+
+.tmdb-season img {
+    width: 90px;
+    height: 135px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.tmdb-season-info h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.tmdb-season-info p {
+    margin: 6px 0;
+    color: #aaa;
+    font-size: 14px;
+}

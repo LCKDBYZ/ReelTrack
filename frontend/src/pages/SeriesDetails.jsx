@@ -4,7 +4,8 @@ import {
     getSeriesById,
     markEpisodeAsWatched,
     removeEpisodeWatch,
-    updateSeries
+    updateSeries,
+    markSeasonAsWatched
 } from "../services/api";
 
 import "./SeriesDetails.css";
@@ -43,6 +44,21 @@ function SeriesDetails() {
             setUpdatingEpisode(episodeId);
 
             await markEpisodeAsWatched(episodeId);
+
+            const updatedData = await getSeriesById(id);
+            setData(updatedData);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setUpdatingEpisode(null);
+        }
+    }
+
+    async function handleMarkSeasonAsWatched(seasonId) {
+        try {
+            setUpdatingEpisode(seasonId);
+
+            await markSeasonAsWatched(seasonId);
 
             const updatedData = await getSeriesById(id);
             setData(updatedData);
@@ -270,6 +286,22 @@ function SeriesDetails() {
                                     />
                                 </div>
                             </div>
+
+                            <button
+                                className="season-watch-button"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    handleMarkSeasonAsWatched(season.id);
+                                }}
+                                disabled={
+                                    updatingEpisode === season.id ||
+                                    season.episodes.every(episode => episode.isWatched)
+                                }
+                            >
+                                {updatingEpisode === season.id
+                                    ? "Updating..."
+                                    : "Mark season as watched"}
+                            </button>
 
                             <span>{isExpanded ? "-" : "+"}</span>
                         </div>

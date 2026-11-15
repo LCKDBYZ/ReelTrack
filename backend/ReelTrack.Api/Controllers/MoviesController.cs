@@ -40,6 +40,18 @@ namespace ReelTrack.Api.Controllers {
             return Ok(movie);
         }
 
+        // Get movie details from TMDB
+        [HttpGet("tmdb/{tmdbId:int}")]
+        public async Task<IActionResult> GetTmdbDetails(int tmdbId) {
+            var movie = await tmdbService.GetMovieDetails(tmdbId);
+
+            if (movie == null) {
+                return NotFound("Movie not found on TMDB.");
+            }
+
+            return Ok(movie);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieRequest request) {
             bool alreadyExists = await context.Movies
@@ -124,6 +136,27 @@ namespace ReelTrack.Api.Controllers {
                 movie.Id,
                 movie.Status,
                 movie.Rating
+            });
+        }
+
+        // Update movie favorite status
+        [HttpPut("{id}/favorite")]
+        public async Task<IActionResult> UpdateFavorite(
+            int id,
+            UpdateMovieFavoriteRequest request) {
+            var movie = await context.Movies.FindAsync(id);
+
+            if (movie == null) {
+                return NotFound("Movie not found.");
+            }
+
+            movie.IsFavorite = request.IsFavorite;
+
+            await context.SaveChangesAsync();
+
+            return Ok(new {
+                movie.Id,
+                movie.IsFavorite
             });
         }
 

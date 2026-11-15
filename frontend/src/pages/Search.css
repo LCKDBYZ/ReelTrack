@@ -1,0 +1,144 @@
+.search-page {
+    color: white;
+}
+
+.search-header {
+    margin-bottom: 24px;
+}
+
+.search-header h1 {
+    margin: 0 0 8px;
+}
+
+.search-header p {
+    color: #a0a0a0;
+}
+
+.search-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #303030;
+    border-radius: 6px;
+    background-color: #1b1b1b;
+    color: white;
+    font-size: 14px;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #8b5cf6;
+}
+
+.search-form button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8b5cf6;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #7c3aed;
+}
+
+.search-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.search-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+}
+
+.search-result-card {
+    overflow: hidden;
+    background-color: #1b1b1b;
+    border: 1px solid #303030;
+    border-radius: 10px;
+}
+
+.search-result-card img,
+.search-no-poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+.search-no-poster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #303030;
+    color: #a0a0a0;
+}
+
+.search-result-info {
+    padding: 12px;
+}
+
+.search-result-info h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    min-height: 38px;
+}
+
+.search-media-type {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.search-media-type.movie {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+.search-media-type.series {
+    background-color: #3b2c5f;
+    color: #c4b5fd;
+}
+
+.search-result-info p {
+    color: #a0a0a0;
+    font-size: 13px;
+}
+
+.search-result-info .search-rating {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.search-overview {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-height: 1.5;
+}
+
+.search-error {
+    color: #f87171;
+}
+
+@media (max-width: 600px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form button {
+        width: 100%;
+    }
+}

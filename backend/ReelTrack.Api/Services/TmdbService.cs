@@ -92,6 +92,12 @@ public class TmdbMovieDetails {
 
     [JsonPropertyName("runtime")]
     public int? Runtime { get; set; }
+
+    [JsonPropertyName("vote_average")]
+    public double VoteAverage { get; set; }
+
+    [JsonPropertyName("genres")]
+    public List<TmdbGenre> Genres { get; set; } = new();
 }
 
 public class TmdbSeriesSearchResponse {
@@ -143,6 +149,21 @@ public class TmdbSeriesDetails {
 
     [JsonPropertyName("last_air_date")]
     public string? LastAirDate { get; set; }
+
+    [JsonPropertyName("vote_average")]
+    public double VoteAverage { get; set; }
+
+    [JsonPropertyName("genres")]
+    public List<TmdbGenre> Genres { get; set; } = new();
+
+    [JsonPropertyName("number_of_seasons")]
+    public int NumberOfSeasons { get; set; }
+
+    [JsonPropertyName("number_of_episodes")]
+    public int NumberOfEpisodes { get; set; }
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
 }
 
 public class TmdbSeasonSummary {
@@ -212,4 +233,12 @@ public class TmdbEpisode {
 
     [JsonPropertyName("still_path")]
     public string? StillPath { get; set; }
+}
+
+public class TmdbGenre {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 }

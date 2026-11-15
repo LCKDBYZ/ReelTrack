@@ -9,6 +9,7 @@ import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import SeriesDetails from "./pages/SeriesDetails";
 import MovieDetails from "./pages/MovieDetails";
+import TmdbDetails from "./pages/TmdbDetails";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/series" element={<Series />} />
         <Route path="/series/:id" element={<SeriesDetails />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/search/:mediaType/:tmdbId" element={<TmdbDetails />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReelTrack.Api.Data;
+using ReelTrack.Api.Dtos;
 using ReelTrack.Api.Models;
 using ReelTrack.Api.Services;
 
@@ -44,7 +45,10 @@ namespace ReelTrack.Api.Controllers {
 
                     NextEpisode = s.Seasons
                         .SelectMany(season => season.Episodes)
-                        .Where(episode => !episode.Watches.Any())
+                        .Where(episode =>
+                            episode.Season.SeasonNumber > 0 &&
+                            !episode.Watches.Any()
+                        )
                         .OrderBy(episode => episode.Season.SeasonNumber)
                         .ThenBy(episode => episode.EpisodeNumber)
                         .Select(episode => new {
@@ -70,6 +74,18 @@ namespace ReelTrack.Api.Controllers {
             var results = await tmdbService.SearchSeries(query);
 
             return Ok(results?.Results ?? new List<TmdbSeriesSearchResult>());
+        }
+
+        // Get series details from TMDB
+        [HttpGet("tmdb/{tmdbId:int}")]
+        public async Task<IActionResult> GetTmdbDetails(int tmdbId) {
+            var series = await tmdbService.GetSeriesDetails(tmdbId);
+
+            if (series == null) {
+                return NotFound("Series not found on TMDB.");
+            }
+
+            return Ok(series);
         }
 
 
@@ -120,6 +136,7 @@ namespace ReelTrack.Api.Controllers {
             var nextEpisode = await context.Episodes
                 .Where(e =>
                     e.Season.SeriesId == id &&
+                    e.Season.SeasonNumber > 0 &&
                     !e.Watches.Any()
                 )
                 .OrderBy(e => e.Season.SeasonNumber)
@@ -168,6 +185,27 @@ namespace ReelTrack.Api.Controllers {
                 series.Id,
                 series.Status,
                 series.Rating
+            });
+        }
+
+        // Update series favorite status
+        [HttpPut("{id}/favorite")]
+        public async Task<IActionResult> UpdateFavorite(
+            int id,
+            UpdateSeriesFavoriteRequest request) {
+            var series = await context.Series.FindAsync(id);
+
+            if (series == null) {
+                return NotFound("Series not found.");
+            }
+
+            series.IsFavorite = request.IsFavorite;
+
+            await context.SaveChangesAsync();
+
+            return Ok(new {
+                series.Id,
+                series.IsFavorite
             });
         }
 
@@ -353,6 +391,32 @@ namespace ReelTrack.Api.Controllers {
                 NewEpisodes = newEpisodeCount,
                 UpdatedSeasons = updatedSeasonCount,
                 UpdatedEpisodes = updatedEpisodeCount
+            });
+        }
+
+        // Mark all episodes in a season as watched
+        [HttpPost("seasons/{seasonId}/watch")]
+        public async Task<IActionResult> MarkSeasonAsWatched(int seasonId) {
+            var season = await context.Seasons
+                .Include(s => s.Episodes)
+                    .ThenInclude(e => e.Watches)
+                .FirstOrDefaultAsync(s => s.Id == seasonId);
+
+            if (season == null) {
+                return NotFound("Season not found.");
+            }
+
+            foreach (var episode in season.Episodes) {
+                if (!episode.Watches.Any()) {
+                    episode.Watches.Add(new EpisodeWatch());
+                }
+            }
+
+            await context.SaveChangesAsync();
+
+            return Ok(new {
+                SeasonId = season.Id,
+                WatchedEpisodes = season.Episodes.Count
             });
         }
 
