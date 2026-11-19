@@ -111,8 +111,7 @@ namespace ReelTrack.Api.Controllers {
                         season.TmdbId,
                         season.SeasonNumber,
                         season.Name,
-                        episodes = season.Episodes.Select(episode => new
-                        {
+                        episodes = season.Episodes.Select(episode => new {
                             id = episode.Id,
                             tmdbId = episode.TmdbId,
                             episodeNumber = episode.EpisodeNumber,
@@ -463,7 +462,16 @@ namespace ReelTrack.Api.Controllers {
                     newSeasonCount++;
                 }
                 else {
-                    updatedSeasonCount++;
+                    bool hasChanged =
+                        season.SeasonNumber != tmdbSeason.SeasonNumber ||
+                        season.Name != tmdbSeason.Name ||
+                        season.Overview != tmdbSeason.Overview ||
+                        season.AirDate != ParseDate(tmdbSeason.AirDate) ||
+                        season.PosterPath != tmdbSeason.PosterPath;
+
+                    if (hasChanged) {
+                        updatedSeasonCount++;
+                    }
                 }
 
                 // Update season metadata
@@ -486,7 +494,17 @@ namespace ReelTrack.Api.Controllers {
                         newEpisodeCount++;
                     }
                     else {
-                        updatedEpisodeCount++;
+                        bool hasChanged =
+                            episode.EpisodeNumber != tmdbEpisode.EpisodeNumber ||
+                            episode.Title != tmdbEpisode.Name ||
+                            episode.Overview != tmdbEpisode.Overview ||
+                            episode.AirDate != ParseDate(tmdbEpisode.AirDate) ||
+                            episode.Runtime != tmdbEpisode.Runtime ||
+                            episode.StillPath != tmdbEpisode.StillPath;
+
+                        if (hasChanged) {
+                            updatedEpisodeCount++;
+                        }
                     }
 
                     // Update episode metadata

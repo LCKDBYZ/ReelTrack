@@ -322,3 +322,24 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.sync-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8b5cf6;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sync-button:hover {
+    background-color: #7c3aed;
+}
+
+.sync-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

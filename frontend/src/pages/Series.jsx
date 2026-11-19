@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import {
     getSeries,
     deleteSeries,
-    updateSeriesFavorite
+    updateSeriesFavorite,
+    syncAllSeries
 } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import "./Series.css";
+import SyncResultModal from "../components/common/SyncResultModal";
 
 function Series() {
     const [series, setSeries] = useState([]);
@@ -15,6 +17,8 @@ function Series() {
     const [selectedStatus, setSelectedStatus] = useState("All");
     const [sortBy, setSortBy] = useState("title-asc");
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    const [syncingAll, setSyncingAll] = useState(false);
+    const [syncAllResult, setSyncAllResult] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -106,6 +110,23 @@ function Series() {
         }
     }
 
+    async function handleSyncAll() {
+        try {
+            setSyncingAll(true);
+            setSyncAllResult(null);
+
+            const result = await syncAllSeries();
+            setSyncAllResult(result);
+
+            const updatedSeries = await getSeries();
+            setSeries(updatedSeries);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setSyncingAll(false);
+        }
+    }
+
     if (loading) {
         return <p>Loading series...</p>;
     }
@@ -159,6 +180,13 @@ function Series() {
                     <option value="title-desc">Title (Z-A)</option>
                     <option value="date-desc">Recently Added</option>
                 </select>
+                <button
+                    className="sync-all-button"
+                    onClick={handleSyncAll}
+                    disabled={syncingAll}
+                >
+                    {syncingAll ? "Syncing all..." : "Sync All"}
+                </button>
             </div>
 
             {series.length === 0 ? (
@@ -248,6 +276,11 @@ function Series() {
                     })}
                 </div>
             )}
+            <SyncResultModal
+                result={syncAllResult}
+                onClose={() => setSyncAllResult(null)}
+                title="All series synchronized!"
+            />
         </div>
     );
 }

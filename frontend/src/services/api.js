@@ -201,3 +201,27 @@ export const importSeries = (tmdbId) =>
 
         return response.json();
     });
+
+export const syncSeries = (id) =>
+    fetch(`${API_BASE_URL}/series/${id}/sync`, {
+        method: "POST"
+    }).then(async response => {
+        if (!response.ok) {
+            const message = await response.text();
+            throw new Error(message || `API error: ${response.status}`);
+        }
+
+        return response.json();
+    });
+
+export const syncAllSeries = () =>
+    fetch(`${API_BASE_URL}/series/sync`, {
+        method: "POST"
+    }).then(async response => {
+        if (!response.ok) {
+            const message = await response.text();
+            throw new Error(message || `API error: ${response.status}`);
+        }
+
+        return response.json();
+    });

@@ -3,23 +3,28 @@ using Microsoft.EntityFrameworkCore;
 using ReelTrack.Api.Data;
 using ReelTrack.Api.Dtos;
 using ReelTrack.Api.Models;
-namespace ReelTrack.Api.Controllers {
+namespace ReelTrack.Api.Controllers
+{
     [ApiController]
     [Route("api/movies/{movieId}/watches")]
-    public class MovieWatchesController : ControllerBase {
+    public class MovieWatchesController : ControllerBase
+    {
         private readonly ReelTrackContext context;
 
-        public MovieWatchesController(ReelTrackContext context) {
+        public MovieWatchesController(ReelTrackContext context)
+        {
             this.context = context;
         }
 
         // Get movie watch history
         [HttpGet]
-        public async Task<IActionResult> GetAll(int movieId) {
+        public async Task<IActionResult> GetAll(int movieId)
+        {
             var movieExists = await context.Movies
                 .AnyAsync(m => m.Id == movieId);
 
-            if (!movieExists) {
+            if (!movieExists)
+            {
                 return NotFound("Movie not found.");
             }
 
@@ -27,14 +32,13 @@ namespace ReelTrack.Api.Controllers {
                 .AsNoTracking()
                 .Where(w => w.MovieId == movieId)
                 .OrderByDescending(w => w.WatchedAt)
-                .Select(w => new {
+                .Select(w => new
+                {
                     w.Id,
                     w.MovieId,
                     w.WatchedAt
                 })
                 .ToListAsync();
-
-            return Ok(watches);
 
             return Ok(watches);
         }
@@ -43,14 +47,17 @@ namespace ReelTrack.Api.Controllers {
         [HttpPost]
         public async Task<IActionResult> Create(
             int movieId,
-            CreateMovieWatchRequest request) {
+            CreateMovieWatchRequest request)
+        {
             var movie = await context.Movies.FindAsync(movieId);
 
-            if (movie == null) {
+            if (movie == null)
+            {
                 return NotFound("Movie not found.");
             }
 
-            var watch = new MovieWatch {
+            var watch = new MovieWatch
+            {
                 MovieId = movieId,
                 WatchedAt = request.WatchedAt ?? DateTime.UtcNow
             };
@@ -59,7 +66,8 @@ namespace ReelTrack.Api.Controllers {
 
             await context.SaveChangesAsync();
 
-            return Ok(new {
+            return Ok(new
+            {
                 watch.Id,
                 watch.MovieId,
                 watch.WatchedAt
@@ -68,12 +76,14 @@ namespace ReelTrack.Api.Controllers {
 
         // Delete a movie watch
         [HttpDelete("{watchId}")]
-        public async Task<IActionResult> Delete(int movieId, int watchId) {
+        public async Task<IActionResult> Delete(int movieId, int watchId)
+        {
             var watch = await context.MovieWatches
                 .FirstOrDefaultAsync(w =>
                     w.Id == watchId && w.MovieId == movieId);
 
-            if (watch == null) {
+            if (watch == null)
+            {
                 return NotFound("Watch record not found.");
             }
 

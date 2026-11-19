@@ -5,10 +5,12 @@ import {
     markEpisodeAsWatched,
     removeEpisodeWatch,
     updateSeries,
-    markSeasonAsWatched
+    markSeasonAsWatched,
+    syncSeries
 } from "../services/api";
 
 import "./SeriesDetails.css";
+import SyncResultModal from "../components/common/SyncResultModal";
 
 function SeriesDetails() {
     const { id } = useParams();
@@ -21,6 +23,8 @@ function SeriesDetails() {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [selectedRating, setSelectedRating] = useState("");
     const [savingDetails, setSavingDetails] = useState(false);
+    const [syncing, setSyncing] = useState(false);
+    const [syncResult, setSyncResult] = useState(null);
 
     useEffect(() => {
         async function loadSeries() {
@@ -107,6 +111,22 @@ function SeriesDetails() {
             setError(error.message);
         } finally {
             setSavingDetails(false);
+        }
+    }
+
+    async function handleSync() {
+        try {
+            setSyncing(true);
+
+            const result = await syncSeries(id);
+            setSyncResult(result);
+            const updatedData = await getSeriesById(id);
+            setData(updatedData);
+
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setSyncing(false);
         }
     }
 
@@ -202,6 +222,13 @@ function SeriesDetails() {
                             disabled={savingDetails}
                         >
                             {savingDetails ? "Saving..." : "Save changes"}
+                        </button>
+
+                        <button
+                            onClick={handleSync}
+                            disabled={syncing}
+                        >
+                            {syncing ? "Syncing..." : "Sync with TMDB"}
                         </button>
                     </div>
                 </div>
@@ -362,6 +389,11 @@ function SeriesDetails() {
                     </section>
                 );
             })}
+            <SyncResultModal
+                result={syncResult}
+                onClose={() => setSyncResult(null)}
+                title="Series synchronized!"
+            />
         </div>
     );
 }
