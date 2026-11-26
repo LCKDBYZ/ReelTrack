@@ -1,6 +1,9 @@
 .sidebar {
     width: 240px;
-    min-height: 100vh;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
     background-color: #151515;
     border-right: 1px solid #292929;
     padding: 24px 16px;
@@ -52,4 +55,5 @@
 
 .sidebar-bottom {
     margin-top: auto;
+    position: relative;
 }

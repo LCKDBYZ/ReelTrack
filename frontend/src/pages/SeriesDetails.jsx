@@ -281,114 +281,116 @@ function SeriesDetails() {
 
             <h2>Seasons</h2>
 
-            {series.seasons.map(season => {
-                const watchedCount = season.episodes.filter(
-                    episode => episode.isWatched
-                ).length;
+            {[...series.seasons]
+                .sort((a, b) => a.seasonNumber - b.seasonNumber)
+                .map(season => {
+                    const watchedCount = season.episodes.filter(
+                        episode => episode.isWatched
+                    ).length;
 
-                const seasonProgress = season.episodes.length > 0
-                    ? Math.round((watchedCount / season.episodes.length) * 100)
-                    : 0;
+                    const seasonProgress = season.episodes.length > 0
+                        ? Math.round((watchedCount / season.episodes.length) * 100)
+                        : 0;
 
-                const isExpanded = expandedSeasons.includes(season.id);
+                    const isExpanded = expandedSeasons.includes(season.id);
 
-                return (
-                    <section className="season-section" key={season.id}>
-                        <div
-                            className="season-header"
-                            onClick={() => toggleSeason(season.id)}
-                        >
-                            <div className="season-header-info">
-                                <h3>{season.name}</h3>
-                                <p>
-                                    {watchedCount} / {season.episodes.length} episodes
-                                    {" · "}
-                                    {seasonProgress}%
-                                </p>
-
-                                <div className="season-progress-bar">
-                                    <div
-                                        className="season-progress-fill"
-                                        style={{ width: `${seasonProgress}%` }}
-                                    />
-                                </div>
-                            </div>
-
-                            <button
-                                className="season-watch-button"
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    handleMarkSeasonAsWatched(season.id);
-                                }}
-                                disabled={
-                                    updatingEpisode === season.id ||
-                                    season.episodes.every(episode => episode.isWatched)
-                                }
+                    return (
+                        <section className="season-section" key={season.id}>
+                            <div
+                                className="season-header"
+                                onClick={() => toggleSeason(season.id)}
                             >
-                                {updatingEpisode === season.id
-                                    ? "Updating..."
-                                    : "Mark season as watched"}
-                            </button>
+                                <div className="season-header-info">
+                                    <h3>{season.name}</h3>
+                                    <p>
+                                        {watchedCount} / {season.episodes.length} episodes
+                                        {" · "}
+                                        {seasonProgress}%
+                                    </p>
 
-                            <span>{isExpanded ? "-" : "+"}</span>
-                        </div>
-
-                        {isExpanded && (
-                            <div className="season-episodes">
-                                {season.episodes.map(episode => (
-                                    <div className="episode-row" key={episode.id}>
-                                        <div className="episode-info">
-                                            <div className="episode-title">
-                                                <span>
-                                                    S{season.seasonNumber}E{episode.episodeNumber}
-                                                </span>
-
-                                                <h4>{episode.title}</h4>
-
-                                                {episode.isWatched && <span className="watched-label">Watched ✓</span>}
-                                            </div>
-
-                                            {episode.overview && (
-                                                <p>{episode.overview}</p>
-                                            )}
-
-                                            <div className="episode-metadata">
-                                                {episode.airDate && (
-                                                    <span>{episode.airDate}</span>
-                                                )}
-
-                                                {episode.runtime && (
-                                                    <span>{episode.runtime} min</span>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {episode.isWatched ? (
-                                            <button
-                                                onClick={() => handleRemoveWatch(episode.id, episode.watchId)}
-                                                disabled={updatingEpisode === episode.id}
-                                            >
-                                                {updatingEpisode === episode.id
-                                                    ? "Updating..."
-                                                    : "Undo watched"}
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={() => handleMarkAsWatched(episode.id)}
-                                                disabled={updatingEpisode === episode.id}
-                                            >
-                                                {updatingEpisode === episode.id
-                                                    ? "Updating..."
-                                                    : "Mark as watched"}
-                                            </button>
-                                        )}
+                                    <div className="season-progress-bar">
+                                        <div
+                                            className="season-progress-fill"
+                                            style={{ width: `${seasonProgress}%` }}
+                                        />
                                     </div>
-                                ))}
+                                </div>
+
+                                <button
+                                    className="season-watch-button"
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        handleMarkSeasonAsWatched(season.id);
+                                    }}
+                                    disabled={
+                                        updatingEpisode === season.id ||
+                                        season.episodes.every(episode => episode.isWatched)
+                                    }
+                                >
+                                    {updatingEpisode === season.id
+                                        ? "Updating..."
+                                        : "Mark season as watched"}
+                                </button>
+
+                                <span>{isExpanded ? "-" : "+"}</span>
                             </div>
-                        )}
-                    </section>
-                );
-            })}
+
+                            {isExpanded && (
+                                <div className="season-episodes">
+                                    {season.episodes.sort((a, b) => a.episodeNumber - b.episodeNumber).map(episode => (
+                                        <div className="episode-row" key={episode.id}>
+                                            <div className="episode-info">
+                                                <div className="episode-title">
+                                                    <span>
+                                                        S{season.seasonNumber}E{episode.episodeNumber}
+                                                    </span>
+
+                                                    <h4>{episode.title}</h4>
+
+                                                    {episode.isWatched && <span className="watched-label">Watched ✓</span>}
+                                                </div>
+
+                                                {episode.overview && (
+                                                    <p>{episode.overview}</p>
+                                                )}
+
+                                                <div className="episode-metadata">
+                                                    {episode.airDate && (
+                                                        <span>{episode.airDate}</span>
+                                                    )}
+
+                                                    {episode.runtime && (
+                                                        <span>{episode.runtime} min</span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {episode.isWatched ? (
+                                                <button
+                                                    onClick={() => handleRemoveWatch(episode.id, episode.watchId)}
+                                                    disabled={updatingEpisode === episode.id}
+                                                >
+                                                    {updatingEpisode === episode.id
+                                                        ? "Updating..."
+                                                        : "Undo watched"}
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleMarkAsWatched(episode.id)}
+                                                    disabled={updatingEpisode === episode.id}
+                                                >
+                                                    {updatingEpisode === episode.id
+                                                        ? "Updating..."
+                                                        : "Mark as watched"}
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
+                    );
+                })}
             <SyncResultModal
                 result={syncResult}
                 onClose={() => setSyncResult(null)}

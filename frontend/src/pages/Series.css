@@ -167,7 +167,8 @@
 }
 
 .series-controls input,
-.series-controls select {
+.series-controls select,
+.series-controls button {
     padding: 10px 12px;
     border: 1px solid #303030;
     border-radius: 6px;
@@ -184,6 +185,11 @@
 .series-controls input:focus,
 .series-controls select:focus {
     outline: none;
+    border-color: #8b5cf6;
+}
+
+.series-controls button:hover {
+    cursor: pointer;
     border-color: #8b5cf6;
 }
 

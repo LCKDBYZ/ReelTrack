@@ -10,4 +10,6 @@
     min-width: 0;
     padding: 32px;
     overflow-y: auto;
+    margin-left: 240px;
+    width: calc(100% - 240px);
 }
