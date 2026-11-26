@@ -202,3 +202,30 @@ ReelTrack is currently under active development.
 
 The current version focuses on the core functionality of a personal movie and TV series tracking application. Additional features, improvements, and UI refinements may be introduced in future versions.
 
+## License
+
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**.
+
+You are free to:
+- Use the software for personal, educational, and other noncommercial purposes.
+- Study and modify the source code.
+- Distribute original or modified versions for noncommercial purposes.
+
+Commercial use is not permitted without prior written permission from the author.
+
+For commercial licensing inquiries, please contact the author.
+
+See the [LICENSE](LICENSE) file for the full license terms.
+
+## Third-Party Services and Libraries
+
+ReelTrack uses third-party services, APIs, and open-source libraries. These components are subject to their own licenses and terms of service, which are separate from this project's license.
+
+In particular:
+
+- **TMDB API:** Movie and TV series metadata, posters, and images are provided by The Movie Database (TMDB) and are subject to its terms of use. ReelTrack is not endorsed or certified by TMDB.
+- **React:** Used for building the frontend.
+- **ASP.NET Core and Entity Framework Core:** Used for the backend and database operations.
+- **PostgreSQL:** Used as the application's database system.
+
+The PolyForm Noncommercial License applies only to the original code and materials owned by the ReelTrack author. It does not override the licenses or terms governing third-party components and services.
