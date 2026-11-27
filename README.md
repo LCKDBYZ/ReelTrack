@@ -62,6 +62,15 @@ The application uses **TMDB (The Movie Database) API** to retrieve movie and TV 
 - View an overview of the personal media collection.
 - Track viewing progress.
 
+### Backup and Data Transfer
+
+ReelTrack supports two different backup methods:
+
+- **JSON Export/Import:** Transfer movies, series and watch history between different ReelTrack installations.
+- **Database Backup/Restore:** Create and restore complete PostgreSQL database backups. These backups are signed with installation-specific RSA keys and can only be restored by the installation that created them.
+
+Backup signing keys are generated automatically and stored locally in the `.keys` directory. They must never be shared or committed to version control.
+
 ## Screenshots
 
 ### Dashboard

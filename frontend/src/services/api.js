@@ -225,3 +225,66 @@ export const syncAllSeries = () =>
 
         return response.json();
     });
+
+
+// Export application data as a JSON backup
+export const exportData = async () => {
+    const response = await fetch(`${API_BASE_URL}/data/export`);
+
+    if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+    }
+
+    return response.blob();
+};
+
+// Import application data from a JSON backup
+export const importData = async (data, mode) => {
+    const response = await fetch(
+        `${API_BASE_URL}/data/import?mode=${mode}`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }
+    );
+
+    if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || `API error: ${response.status}`);
+    }
+
+    return response.json();
+};
+
+// Create a complete PostgreSQL database backup
+export const createDatabaseBackup = async () => {
+    const response = await fetch(`${API_BASE_URL}/database/backup`);
+
+    if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || `API error: ${response.status}`);
+    }
+
+    return response.blob();
+};
+
+// Restore the PostgreSQL database from an SQL backup
+export const restoreDatabaseBackup = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${API_BASE_URL}/database/restore`, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || `API error: ${response.status}`);
+    }
+
+    return response.json();
+};

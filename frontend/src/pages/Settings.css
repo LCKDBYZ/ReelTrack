@@ -73,11 +73,76 @@
     color: white;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.settings-option button:hover:not(:disabled) {
+    background-color: #7c3aed;
 }
 
 .settings-option button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
+
+.settings-option .secondary-button {
+    background-color: #383838;
+    margin-top: 12px;
+}
+
+.settings-option .secondary-button:hover:not(:disabled) {
+    background-color: #4a4a4a;
+}
+
+.settings-option .danger-button,
+.confirmation-actions .danger-button {
+    background-color: #b91c1c;
+}
+
+.settings-option .danger-button:hover:not(:disabled),
+.confirmation-actions .danger-button:hover:not(:disabled) {
+    background-color: #991b1b;
+}
+
+.import-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.import-buttons button {
+    margin-top: 0;
+}
+
+.selected-file {
+    margin-top: 10px !important;
+    color: #c4b5fd !important;
+    overflow-wrap: anywhere;
+}
+
+.warning-text {
+    color: #fbbf24 !important;
+}
+
+.settings-message {
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.settings-message.success {
+    background-color: #14532d;
+    border: 1px solid #166534;
+    color: #bbf7d0;
+}
+
+.settings-message.error {
+    background-color: #7f1d1d;
+    border: 1px solid #991b1b;
+    color: #fecaca;
 }
 
 .about-content {
@@ -89,6 +154,70 @@
     margin-bottom: 8px;
 }
 
+.confirmation-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.confirmation-modal {
+    width: 100%;
+    max-width: 450px;
+    padding: 26px;
+    background-color: #1b1b1b;
+    border: 1px solid #444;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.confirmation-modal h2 {
+    margin: 0 0 16px;
+    font-size: 20px;
+}
+
+.confirmation-modal p {
+    margin: 0 0 16px;
+    color: #bbb;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.confirmation-actions button {
+    min-width: 100px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.confirmation-actions .secondary-button {
+    background-color: #383838;
+}
+
+.confirmation-actions .secondary-button:hover:not(:disabled) {
+    background-color: #4a4a4a;
+}
+
+.confirmation-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
     .settings-section {
         padding: 18px;
@@ -97,5 +226,9 @@
     .settings-option {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .confirmation-modal {
+        padding: 20px;
     }
 }
