@@ -1,0 +1,101 @@
+.settings-page {
+    color: white;
+}
+
+.settings-header {
+    margin-bottom: 32px;
+}
+
+.settings-header h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+.settings-header p {
+    margin: 0;
+    color: #999;
+    font-size: 14px;
+}
+
+.settings-section {
+    background-color: #1b1b1b;
+    border: 1px solid #303030;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.settings-section h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.settings-description {
+    margin: 0 0 24px;
+    color: #999;
+    font-size: 14px;
+}
+
+.settings-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 0;
+    border-top: 1px solid #303030;
+}
+
+.settings-option h3,
+.about-content h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+}
+
+.settings-option p,
+.about-content p {
+    margin: 0;
+    color: #999;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.settings-option button {
+    min-width: 100px;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8b5cf6;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.settings-option button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.about-content {
+    padding-top: 18px;
+    border-top: 1px solid #303030;
+}
+
+.about-content p {
+    margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+    .settings-section {
+        padding: 18px;
+    }
+
+    .settings-option {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

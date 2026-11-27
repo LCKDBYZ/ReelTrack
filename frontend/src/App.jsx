@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
 
-import Dashboard from "./pages/DashBoard";
+import Dashboard from "./pages/Dashboard";
 import Movies from "./pages/Movies";
 import Series from "./pages/Series";
 import Search from "./pages/Search";
