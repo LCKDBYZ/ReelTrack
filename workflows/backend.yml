@@ -1,0 +1,24 @@
+name: Backend Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore backend/ReelTrack.Api/ReelTrack.Api.csproj
+
+      - name: Build backend
+        run: dotnet build backend/ReelTrack.Api/ReelTrack.Api.csproj --no-restore --configuration Release
