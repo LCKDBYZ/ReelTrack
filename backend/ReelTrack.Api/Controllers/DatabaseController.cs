@@ -93,27 +93,54 @@ namespace ReelTrack.Api.Controllers {
 
             EnsureBackupKeys();
 
-            var startInfo = new ProcessStartInfo {
-                FileName = "docker",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
 
-            startInfo.ArgumentList.Add("exec");
-            startInfo.ArgumentList.Add("-e");
-            startInfo.ArgumentList.Add(
-                $"PGPASSWORD={connection.Password}"
-            );
-            startInfo.ArgumentList.Add("reeltrack-postgres-1");
-            startInfo.ArgumentList.Add("pg_dump");
+            ProcessStartInfo startInfo;
+
+            if (environment.IsDevelopment()) {
+                // Use Docker CLI during local development
+                startInfo = new ProcessStartInfo {
+                    FileName = "docker",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                startInfo.ArgumentList.Add("exec");
+                startInfo.ArgumentList.Add("-e");
+                startInfo.ArgumentList.Add($"PGPASSWORD={connection.Password}");
+                startInfo.ArgumentList.Add("reeltrack-postgres-1");
+                startInfo.ArgumentList.Add("pg_dump");
+            }
+            else {
+                // Connect directly to PostgreSQL inside Docker
+                startInfo = new ProcessStartInfo {
+                    FileName = "pg_dump",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                startInfo.Environment["PGPASSWORD"] = connection.Password;
+            }
+
             startInfo.ArgumentList.Add("-U");
             startInfo.ArgumentList.Add(connection.Username);
             startInfo.ArgumentList.Add("-d");
             startInfo.ArgumentList.Add(connection.Database);
             startInfo.ArgumentList.Add("--no-owner");
             startInfo.ArgumentList.Add("--no-acl");
+            startInfo.ArgumentList.Add("--clean");
+            startInfo.ArgumentList.Add("--if-exists");
+
+            if (!environment.IsDevelopment()) {
+                startInfo.ArgumentList.Add("-h");
+                startInfo.ArgumentList.Add(connection.Host ?? "postgres");
+                startInfo.ArgumentList.Add("-p");
+                startInfo.ArgumentList.Add(connection.Port.ToString());
+            }
+
 
             using var process = new Process {
                 StartInfo = startInfo
@@ -308,23 +335,46 @@ namespace ReelTrack.Api.Controllers {
                 );
             }
 
-            var startInfo = new ProcessStartInfo {
-                FileName = "docker",
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
 
-            startInfo.ArgumentList.Add("exec");
-            startInfo.ArgumentList.Add("-i");
-            startInfo.ArgumentList.Add("-e");
-            startInfo.ArgumentList.Add(
-                $"PGPASSWORD={connection.Password}"
-            );
-            startInfo.ArgumentList.Add("reeltrack-postgres-1");
-            startInfo.ArgumentList.Add("psql");
+            ProcessStartInfo startInfo;
+
+            if (environment.IsDevelopment()) {
+                // Use Docker CLI during local development
+                startInfo = new ProcessStartInfo {
+                    FileName = "docker",
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                startInfo.ArgumentList.Add("exec");
+                startInfo.ArgumentList.Add("-i");
+                startInfo.ArgumentList.Add("-e");
+                startInfo.ArgumentList.Add($"PGPASSWORD={connection.Password}");
+                startInfo.ArgumentList.Add("reeltrack-postgres-1");
+                startInfo.ArgumentList.Add("psql");
+            }
+            else {
+                // Connect directly to PostgreSQL inside Docker
+                startInfo = new ProcessStartInfo {
+                    FileName = "psql",
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                startInfo.Environment["PGPASSWORD"] = connection.Password;
+
+                startInfo.ArgumentList.Add("-h");
+                startInfo.ArgumentList.Add(connection.Host ?? "postgres");
+                startInfo.ArgumentList.Add("-p");
+                startInfo.ArgumentList.Add(connection.Port.ToString());
+            }
+
             startInfo.ArgumentList.Add("-U");
             startInfo.ArgumentList.Add(connection.Username);
             startInfo.ArgumentList.Add("-d");
@@ -332,6 +382,7 @@ namespace ReelTrack.Api.Controllers {
             startInfo.ArgumentList.Add("--set");
             startInfo.ArgumentList.Add("ON_ERROR_STOP=1");
             startInfo.ArgumentList.Add("--single-transaction");
+
 
             using var process = new Process {
                 StartInfo = startInfo
@@ -342,17 +393,11 @@ namespace ReelTrack.Api.Controllers {
             var outputTask = process.StandardOutput.ReadToEndAsync();
             var errorTask = process.StandardError.ReadToEndAsync();
 
-            await process.StandardInput.WriteLineAsync(
-                "DROP SCHEMA public CASCADE;"
-            );
-
-            await process.StandardInput.WriteLineAsync(
-                "CREATE SCHEMA public;"
-            );
+            await process.StandardInput.BaseStream.WriteAsync(sqlBytes);
 
             await process.StandardInput.FlushAsync();
 
-            await process.StandardInput.BaseStream.WriteAsync(sqlBytes);
+            process.StandardInput.Close();
 
             process.StandardInput.Close();
 

@@ -30,15 +30,25 @@ builder.Services.AddDbContext<ReelTrackContext>(options =>
 );
 
 var app = builder.Build();
+// Apply pending database migrations in production
+if (!app.Environment.IsDevelopment()) {
+    using var scope = app.Services.CreateScope();
+
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<ReelTrackContext>();
+
+    dbContext.Database.Migrate();
+}
 app.UseCors("Frontend");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment()) {
+    app.UseHttpsRedirection();
+}
 
 app.MapControllers();
 app.Run();
