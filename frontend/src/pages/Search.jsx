@@ -12,6 +12,8 @@ function Search() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [hasSearched, setHasSearched] = useState(false);
+    const [mediaType, setMediaType] = useState("all");
+    const [sortBy, setSortBy] = useState("popularity");
 
     const navigate = useNavigate();
 
@@ -21,12 +23,13 @@ function Search() {
         }
     }, []);
 
-    async function handleSearch(event) {
-        event.preventDefault();
+    async function handleSearch(event, selectedType = mediaType) {
+        event?.preventDefault();
 
         if (!searchTerm.trim()) {
             return;
         }
+
         sessionStorage.setItem("reeltrackSearchTerm", searchTerm.trim());
 
         try {
@@ -34,14 +37,25 @@ function Search() {
             setError(null);
             setHasSearched(true);
 
-            const [movieResults, seriesResults] = await Promise.all([
-                searchMovies(searchTerm.trim()),
-                searchSeries(searchTerm.trim())
-            ]);
+            if (selectedType === "all") {
+                const [movieResults, seriesResults] = await Promise.all([
+                    searchMovies(searchTerm.trim()),
+                    searchSeries(searchTerm.trim())
+                ]);
 
+                setMovies(movieResults);
+                setSeries(seriesResults);
+            } else if (selectedType === "movie") {
+                const movieResults = await searchMovies(searchTerm.trim());
 
-            setMovies(movieResults);
-            setSeries(seriesResults);
+                setMovies(movieResults);
+                setSeries([]);
+            } else if (selectedType === "series") {
+                const seriesResults = await searchSeries(searchTerm.trim());
+
+                setMovies([]);
+                setSeries(seriesResults);
+            }
         } catch (error) {
             setError(error.message);
         } finally {
@@ -64,9 +78,37 @@ function Search() {
         }))
     ];
 
-    results.sort((a, b) =>
-        (b.voteAverage || 0) - (a.voteAverage || 0)
-    );
+    const sortedResults = [...results].sort((a, b) => {
+        const popularityA = a.popularity || 0;
+        const popularityB = b.popularity || 0;
+
+        const ratingA = a.vote_average ?? a.voteAverage ?? 0;
+        const ratingB = b.vote_average ?? b.voteAverage ?? 0;
+
+        const dateA = a.releaseDate || a.firstAirDate || "";
+        const dateB = b.releaseDate || b.firstAirDate || "";
+
+        if (sortBy === "popularity") {
+            return popularityB - popularityA;
+        }
+
+        if (sortBy === "rating") {
+            return ratingB - ratingA;
+        }
+
+        if (sortBy === "release-date") {
+            return dateB.localeCompare(dateA);
+        }
+
+        if (sortBy === "title") {
+            const titleA = a.title || a.name || "";
+            const titleB = b.title || b.name || "";
+
+            return titleA.localeCompare(titleB);
+        }
+
+        return 0;
+    });
 
     return (
         <div className="search-page">
@@ -88,6 +130,56 @@ function Search() {
                 </button>
             </form>
 
+            <div className="search-type-selector">
+                <button
+                    type="button"
+                    className={mediaType === "all" ? "active" : ""}
+                    onClick={() => {
+                        setMediaType("all");
+                        handleSearch(null, "all");
+                    }}
+                >
+                    All
+                </button>
+
+                <button
+                    type="button"
+                    className={mediaType === "movie" ? "active" : ""}
+                    onClick={() => {
+                        setMediaType("movie");
+                        handleSearch(null, "movie");
+                    }}
+                >
+                    Movies
+                </button>
+
+                <button
+                    type="button"
+                    className={mediaType === "series" ? "active" : ""}
+                    onClick={() => {
+                        setMediaType("series");
+                        handleSearch(null, "series");
+                    }}
+                >
+                    Series
+                </button>
+            </div>
+
+            <div className="search-sort">
+                <label htmlFor="sortBy">Sort by:</label>
+
+                <select
+                    id="sortBy"
+                    value={sortBy}
+                    onChange={event => setSortBy(event.target.value)}
+                >
+                    <option value="popularity">Popularity</option>
+                    <option value="rating">Rating</option>
+                    <option value="release-date">Release Date</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+            </div>
+
             {loading && <p>Searching...</p>}
 
             {error && <p className="search-error">Error: {error}</p>}
@@ -97,7 +189,7 @@ function Search() {
                     <p>No results found.</p>
                 ) : (
                     <div className="search-results">
-                        {results.map(item => (
+                        {sortedResults.map(item => (
                             <div
                                 className="search-result-card"
                                 key={`${item.mediaType}-${item.id}`}
