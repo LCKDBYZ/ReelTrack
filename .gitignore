@@ -86,3 +86,7 @@ desktop.ini
 # Database backups
 *.bak
 *.dump
+
+# Electron
+**/release/
+**/electron-builder-debug.yml

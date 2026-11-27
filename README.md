@@ -62,6 +62,23 @@ The application uses **TMDB (The Movie Database) API** to retrieve movie and TV 
 - View an overview of the personal media collection.
 - Track viewing progress.
 
+## Screenshots
+
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Movies
+![Movies](docs/screenshots/movies.png)
+
+### Series
+![Series](docs/screenshots/series.png)
+
+### Series Details
+![Series Details](docs/screenshots/series-details.png)
+
+### Search
+![Search](docs/screenshots/search.png)
+
 ## How It Works
 
 ReelTrack follows a client-server architecture.
